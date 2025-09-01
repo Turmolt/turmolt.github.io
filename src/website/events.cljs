@@ -5,6 +5,12 @@
   [reitit.frontend.controllers :as rfc]
   [reitit.frontend.easy :as rfe]))
 
+(defn track-page-view [page-name]
+  (when (exists? js/gtag)
+    (js/gtag "config" "UA-175811688-1" 
+             #js {:page_title page-name
+                  :page_location (str js/location.origin "/#" (name page-name))})))
+
 (re-frame/reg-event-db
  ::initialize-db
  (fn [_ _]
@@ -24,5 +30,7 @@
  ::navigated
  (fn [db [_ new-match]]
    (let [old-match (:page db)
-         controllers (rfc/apply-controllers (:controllers old-match) new-match)]
+         controllers (rfc/apply-controllers (:controllers old-match) new-match)
+         page-name (get-in new-match [:data :name])]
+     (track-page-view page-name)
      (assoc db :page (assoc new-match :controllers controllers)))))

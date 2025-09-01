@@ -67,8 +67,6 @@
     "I enjoy spending my free time making games, tinkering with shaders, clojure, and taking my dog on adventures."]
    [:p "If you would like to partner up and create something awesome, " [link "mailto:sam@gates.dev" "contact me"] " and we can make it happen."]])
 
-
-
 (defn display-pages [title posts]
   (set! (. js/document -title) title)
   [:div {:style {:max-width 700
