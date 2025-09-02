@@ -7,9 +7,9 @@
 
 (defn track-page-view [page-name]
   (when (exists? js/gtag)
-    (js/gtag "config" "UA-175811688-1" 
+    (js/gtag "event" "page_view"
              #js {:page_title page-name
-                  :page_location (str js/location.origin "/#" (name page-name))})))
+                  :page_location (str js/location.origin "/#" page-name)})))
 
 (re-frame/reg-event-db
  ::initialize-db
@@ -32,5 +32,5 @@
    (let [old-match (:page db)
          controllers (rfc/apply-controllers (:controllers old-match) new-match)
          page-name (get-in new-match [:data :name])]
-     (track-page-view page-name)
+     (track-page-view (name page-name))
      (assoc db :page (assoc new-match :controllers controllers)))))
